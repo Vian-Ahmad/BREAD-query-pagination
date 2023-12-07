@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQlite BREAD Data Update</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="page1">
+    <div class="container-form">
+        <div class="head">
+            <h1>Updating Data</h1>
+        </div>
+        <form class="form-list" action="" method="post">
+            <div class="box">
+                <label for="name">Name</label>
+                <input type="text" name="name" placeholder="insert your name" value="<%= dataEdit.name %>" required
+                    class="subForm" /><br>
+            </div>
+            <div class="box">
+                <label for="height">Height</label>
+                <input type="number" name="height" placeholder="insert your height" value="<%= dataEdit.height %>"
+                    required class="subForm" /><br>
+            </div>
+            <div class="box">
+                <label for="weight">Weight</label>
+                <input type="number" name="weight" step="0.0001" placeholder="insert your weight"
+                    value="<%= dataEdit.weight %>" required class="subForm" /><br>
+            </div>
+            <div class="date-group">
+                <label for="birthdate">Birth Date</label>
+                <input type="date" name="birthdate" value="<%= dataEdit.birthdate %>" required class="birth2" />
+            </div>
+            <div class="radio-ctr">
+                <label class="op-tag" for="married">Is Married</label>
+                <div class="box-rad2">
+                    <label class="form-rad" for="false">
+                        <input type="radio" name="married" value="false" <%= dataEdit.married === false ? 'checked' : ''
+                            %>> Not Yet
+                    </label>
+                    <label class="form-rad" for="true">
+                        <input type="radio" name="married" value="true" <%= dataEdit.married === true ? 'checked' : '' %>>
+                        Yes
+                    </label>
+                </div>
+            </div>
+            <div class="foot-form">
+                <div class="formBtm-abv">
+                    <button class="btm-one1" type="submit">Save</button>
+                    <a href="/" class="tombol">
+                        <button class="btm-two2" type="button">Back</button>
+                    </a>
+                </div>
+            </div>
+        </form>
+        <div class="line-foot"></div>
+    </div>
+
+</body>
+
+
+</html>

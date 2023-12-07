@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQlite BREAD</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="page1">
+    <div class="container">
+        <div class="head">
+            <h1>SQLite BREAD(Browse, Read, Edit, Add, Delete) and Pagination</h1>
+        </div>
+        <form class="form-list" action="" method="get">
+            <div class="box">
+                <label for="name">Name</label>
+                <input type="text" name="name" placeholder="insert your name" class="subForm"
+                    value="<%= query.name %>" /><br>
+            </div>
+            <div class="box">
+                <label for="height">Height</label>
+                <input type="number" name="height" placeholder="insert your height" class="subForm" /><br>
+            </div>
+            <div class="box">
+                <label for="weight">Weight</label>
+                <input type="number" name="weight" step="0.0001" placeholder="insert your weight" class="subForm" /><br>
+            </div>
+            <div class="date-group">
+                <label for="birthdate">Birth Date</label>
+                <input type="date" name="startdate" class="birth" />
+                <p>s.d.</p>
+                <input type="date" name="enddate" class="birth" /><br>
+            </div>
+            <div class="married-group">
+                <label for="married">Is Married</label>
+                <select name="married" class="subForm2">
+                    <option disabled selected>-select married-</option>
+                    <option value="1">true</option>
+                    <option value="0">false</option>
+                </select>
+            </div>
+            <div class="radio-ctr">
+                <label class="op-tag">Operation</label>
+                <div class="box-rad">
+                    <label class="form-control"><input type="radio" name="radio" />OR</label>
+                    <label class="form-control"><input type="radio" name="radio" />AND</label>
+                </div>
+            </div>
+            <div class="btm-abv">
+                <button class="btm-one" type="submit">Search</button>
+                <a href="/" class="tombol">
+                    <button class="btm-two" type="button">Reset</button>
+                </a>
+            </div>
+        </form>
+        <div class="line"></div>
+        <div class="bagan">
+            <table>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Height</th>
+                    <th>Weight</th>
+                    <th>Birth Date</th>
+                    <th>Is Married</th>
+                    <th>Actions</th>
+                </tr>
+                <% rows.forEach((item, index)=> { %>
+                    <tr>
+                        <td>
+                            <%= index + offset + 1 %>
+                        </td>
+                        <td>
+                            <%= item.name %>
+                        </td>
+                        <td>
+                            <%= item.height %>
+                        </td>
+                        <td>
+                            <%= item.weight %>
+                        </td>
+                        <td>
+                            <%= item.birthdate %>
+                        </td>
+                        <td>
+                            <%= item.married !==null && item.married !==undefined ? (item.married ? 'Yes' : 'Not Yet' )
+                                : '' %>
+
+                        </td>
+                        <td>
+                            <div class="modi">
+                                <a href="/edit/<%= item.id %>" class="btm"><button class="btm-update"
+                                        type="button">Update</button></a>
+                                <a href="/delete/<%= item.id %>" onclick="return confirmation('<%= item.name %>')"
+                                    class="btm"><button class="btm-delete" type="button">Delete</button></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </table>
+        </div>
+        <div class="footer">
+            <div class="tbl-add">
+                <a href="/add" class="tombol">
+                    <button class="btm-add" type="button">Add</button>
+                </a>
+            </div>
+            <div class="basket-pagi">
+            <div class="pagination">
+                <a href="#">&laquo;</a>
+                <% for ( let i=1; i <=pages; i++){ %>
+                <a class="<%= page == i ? 'active': ''%>" href="/?page=<%= i %>"><%= i %></a>
+                <% } %>
+                <a href="#">&raquo;</a>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmation(name) {
+            return confirm(`Apakah kamu yakin akan menghapus data '${name}' ?`)
+        }
+    </script>
+
+</body>
+
+
+</html>
