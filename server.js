@@ -17,35 +17,79 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-    const page = req.query.page || 1
+    const { page = 1, name, height, weight, startdate, enddate, married, operator } = req.query;
+
     const limit = 5
     const offset = (page - 1) * limit
 
     const queries = []
     const params = []
+    const basketParams = []
 
-    if (req.query.name) {
+    if (name) {
         queries.push(`name LIKE '%' || ? || '%'`)
-        params.push(req.query.name)
+        params.push(name)
+        basketParams.push(name)
     }
 
-    db.get('SELECT COUNT(*) as total FROM data', (err, data) => {
-        const total = data.total
-        const pages = Math.ceil(total / limit)
+    if (height) {
+        queries.push(`height =?`)
+        params.push(height)
+        basketParams.push(height)
+    }
+
+    if (weight) {
+        queries.push(`weight =?`)
+        params.push(weight)
+        basketParams.push(weight)
+    }
+
+    if (startdate && enddate) {
+        queries.push(`birthdate BETWEEN ? AND ?`)
+        params.push(startdate, enddate)
+        basketParams.push(startdate, enddate)
+    } else if (startdate) {
+        queries.push(`birthdate >=?`)
+        params.push(startdate)
+        basketParams.push(startdate)
+    } else if (enddate) {
+        queries.push(`birthdate <=?`)
+        params.push(enddate)
+        basketParams.push(enddate)
+    }
+
+    if (married) {
+        queries.push(`married =?`)
+        params.push(married)
+        basketParams.push(married)
+    }
 
 
-        let sql = 'SELECT * FROM data'
+    let sql = 'SELECT * FROM data'
+    let sqlcount = 'SELECT COUNT(*) as total FROM data'
 
-        if (queries.length > 0) {
-            sql += ` WHERE ${queries.join(' AND ')}`
+   
+    if (queries.length > 0) {
+        sql += ` WHERE ${queries.join(` ${operator} `)}`
+        sqlcount += ` WHERE ${queries.join(` ${operator} `)}`
+    }
+
+    sql += ` ORDER BY id DESC limit ? offset ? `
+    params.push(limit, offset)
+
+    db.get(sqlcount, basketParams, (err, data) => {
+        if (err) { res.send(err) }
+        else {
+            const total = data.total
+            const pages = Math.ceil(total / limit)
+
+            db.all(sql, params, function (err, data) {
+                if (err) { res.send(err) }
+                else {
+                    res.render('list', { data, query: req.query, pages, offset, page, url: req.url })
+                }
+            })
         }
-
-        sql += ` limit ? offset ?`
-        params.push(limit, offset)
-
-        db.all(sql, params, function (err, rows) {
-            res.render('list', { rows, query: req.query, pages, offset, page })
-        })
     })
 })
 

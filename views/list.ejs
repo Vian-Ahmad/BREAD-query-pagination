@@ -21,31 +21,35 @@
             </div>
             <div class="box">
                 <label for="height">Height</label>
-                <input type="number" name="height" placeholder="insert your height" class="subForm" /><br>
+                <input type="number" name="height" placeholder="insert your height" class="subForm"
+                    value="<%= query.height %>" /><br>
             </div>
             <div class="box">
                 <label for="weight">Weight</label>
-                <input type="number" name="weight" step="0.0001" placeholder="insert your weight" class="subForm" /><br>
+                <input type="number" name="weight" step="0.0001" placeholder="insert your weight" class="subForm"
+                    value="<%= query.weight %>" /><br>
             </div>
             <div class="date-group">
                 <label for="birthdate">Birth Date</label>
-                <input type="date" name="startdate" class="birth" />
+                <input type="date" name="startdate" class="birth" value="<%= query.startdate %>" />
                 <p>s.d.</p>
-                <input type="date" name="enddate" class="birth" /><br>
+                <input type="date" name="enddate" class="birth" value="<%= query.enddate %>" /><br>
             </div>
             <div class="married-group">
                 <label for="married">Is Married</label>
                 <select name="married" class="subForm2">
                     <option disabled selected>-select married-</option>
-                    <option value="1">true</option>
-                    <option value="0">false</option>
+                    <option value="0" <% if (query.married===0) { %>selected<% } %>>Not Yet</option>
+                    <option value="1" <% if (query.married===1) { %>selected<% } %>>Yes</option>
                 </select>
             </div>
             <div class="radio-ctr">
                 <label class="op-tag">Operation</label>
                 <div class="box-rad">
-                    <label class="form-control"><input type="radio" name="radio" />OR</label>
-                    <label class="form-control"><input type="radio" name="radio" />AND</label>
+                    <label class="form-control"><input type="radio" id="OR" name="operator" value="OR" <% if
+                            (query.operator=="OR" || !query.opertor) { %>checked<% } %> />OR</label>
+                    <label class="form-control"><input type="radio" id="AND" name="operator" value="AND" <% if
+                            (query.operator=="AND" ) { %>checked<% } %> />AND</label>
                 </div>
             </div>
             <div class="btm-abv">
@@ -67,7 +71,7 @@
                     <th>Is Married</th>
                     <th>Actions</th>
                 </tr>
-                <% rows.forEach((item, index)=> { %>
+                <% data.forEach((item, index)=> { %>
                     <tr>
                         <td>
                             <%= index + offset + 1 %>
@@ -108,14 +112,16 @@
                 </a>
             </div>
             <div class="basket-pagi">
-            <div class="pagination">
-                <a href="#">&laquo;</a>
-                <% for ( let i=1; i <=pages; i++){ %>
-                <a class="<%= page == i ? 'active': ''%>" href="/?page=<%= i %>"><%= i %></a>
-                <% } %>
-                <a href="#">&raquo;</a>
+                <div class="pagination">
+                    <a href="<%=page > 1 ? url.replace(`page=${page}`, `page=${page - 1}`) : url %>">&laquo;</a>
+                    <% for ( let i=1; i <=pages; i++){ %>
+                        <a class="<%= page == i ? 'active': ''%>" href="/?page=<%= i %>">
+                            <%= i %>
+                        </a>
+                        <% } %>
+                            <a href="<%=page < pages ? url.replace(`page=${page}`, `page=${page * 1 + 1}`) : url %>">&raquo;</a>
+                </div>
             </div>
-        </div>
         </div>
     </div>
 
