@@ -14,6 +14,7 @@
             <h1>SQLite BREAD(Browse, Read, Edit, Add, Delete) and Pagination</h1>
         </div>
         <form class="form-list" action="" method="get">
+            <input type="hidden" name="page" value="1">
             <div class="box">
                 <label for="name">Name</label>
                 <input type="text" name="name" placeholder="insert your name" class="subForm"
@@ -37,19 +38,31 @@
             </div>
             <div class="married-group">
                 <label for="married">Is Married</label>
+                <% if (query.married == "1") { %>
                 <select name="married" class="subForm2">
                     <option disabled selected>-select married-</option>
-                    <option value="0" <% if (query.married===0) { %>selected<% } %>>Not Yet</option>
-                    <option value="1" <% if (query.married===1) { %>selected<% } %>>Yes</option>
+                    <option value="0">Not Yet</option>
+                    <option value="1" selected>Yes</option>
                 </select>
+                <% } else if (query.married == "0") { %>
+                    <select name="married" class="subForm2">
+                        <option disabled selected>-select married-</option>
+                        <option value="0" selected>Not Yet</option>
+                        <option value="1" >Yes</option>
+                    </select>
+                    <% } else { %>
+                        <select name="married" class="subForm2">
+                            <option disabled selected>-select married-</option>
+                            <option value="0" >Not Yet</option>
+                            <option value="1" >Yes</option>
+                        </select>
+                        <% } %>
             </div>
             <div class="radio-ctr">
                 <label class="op-tag">Operation</label>
                 <div class="box-rad">
-                    <label class="form-control"><input type="radio" id="OR" name="operator" value="OR" <% if
-                            (query.operator=="OR" || !query.opertor) { %>checked<% } %> />OR</label>
-                    <label class="form-control"><input type="radio" id="AND" name="operator" value="AND" <% if
-                            (query.operator=="AND" ) { %>checked<% } %> />AND</label>
+                    <label class="form-control"><input type="radio" id="OR" name="operator" value="OR" <% if (query.operator=="OR" || !query.operator) { %>checked<% } %> />OR</label>
+                    <label class="form-control"><input type="radio" id="AND" name="operator" value="AND" <% if (query.operator=="AND" ) { %>checked<% } %> />AND</label>
                 </div>
             </div>
             <div class="btm-abv">
@@ -113,23 +126,66 @@
             </div>
             <div class="basket-pagi">
                 <div class="pagination">
-                    <a href="<%=page > 1 ? url.replace(`page=${page}`, `page=${page - 1}`) : url %>">&laquo;</a>
-                    <% for ( let i=1; i <=pages; i++){ %>
-                        <a class="<%= page == i ? 'active': ''%>" href="/?page=<%= i %>">
-                            <%= i %>
-                        </a>
+                    <% if (url.includes("page=")) { %>
+                    <% if(page == '1') { %>
+                        <a href="<%= url.replace(`page=${page}`, `page=${page}`) %>">&laquo;</a>
+                    <% } else { %>
+                        <a href="<%= url.replace(`page=${page}`, `page=${page - 1}`) %>">&laquo;</a>
+                    <% } %>
+                    <% } else { %>
+                        <% if( page == '1') { %>
+                            <a href="#">&laquo;</a>
+                        <% } else { %>
+                            <a href="/?page=<%= page - 1 %>">&laquo;</a>
                         <% } %>
-                            <a href="<%=page < pages ? url.replace(`page=${page}`, `page=${page * 1 + 1}`) : url %>">&raquo;</a>
+                        <% } %>
+                    <% for(let i =1; i <= pages; i++) { %>
+                        <% if(url.includes("page=")) { %>
+                            <% if (i == page) { %>
+                                <a href="<%= url.replace(`page=${page}`, `page=${i}`) %>" class="<%= page == i ? 'active' : '' %>"><%= i %></a>
+                            <% } else { %>
+                                <a href="<%= url.replace(`page=${page}`, `page=${i}`) %>" class="<%= page == i ? 'active' : '' %>"><%= i %></a>
+                            <% } %>
+                        <% } else { %>
+                            <% if (i == page) { %>
+                                <a href="/?page=<%= i %>" class="<%= page == i ? 'active' : '' %>"><%= i %></a>
+                            <% } else { %>
+                                <a href="/?page=<%= i %>" class="<%= page == i ? 'active' : '' %>"><%= i %></a>
+                            <% } %>
+                        <% } %>
+                    <% } %>
+                    <% if (url.includes("page=")){ %>
+                    <% if(page == pages) { %>
+                        <a href="<%= url.replace(`page=${page}`, `page=${page}`) %>">&raquo;</a>
+                    <% } else { %>
+                        <a href="<%= url.replace(`page=${page}`, `page=${(page * 1) + 1}`) %>">&raquo;</a>
+                    <% } %>
+                    <% } else { %>
+                        <% if ( page == pages) { %>
+                            <a href="#">&raquo;</a>
+                            <% } else { %>
+                                <a href="/?page=<%= Number(page) + 1 %>">&raquo;</a>
+                                <% } %>
+                                <% } %>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function confirmation(name) {
-            return confirm(`Apakah kamu yakin akan menghapus data '${name}' ?`)
-        }
-    </script>
+    <!-- <div class="notif" id="notif">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <p class="close" onclick="off()">&times;</p>
+                </div>
+                <div class="modal-body">
+                    <p id="ask"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="off-click" onclick="off()">No</button>
+                    <a id="nextdelete" class="nextdel" href="#">Yes</a>
+                </div> -->
 
 </body>
 
