@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQlite BREAD</title>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="javascript/uti.js"></script>
 </head>
 
 <body class="page1">
@@ -110,8 +111,7 @@
                             <div class="modi">
                                 <a href="/edit/<%= item.id %>" class="btm"><button class="btm-update"
                                         type="button">Update</button></a>
-                                <a href="/delete/<%= item.id %>" onclick="return confirmation('<%= item.name %>')"
-                                    class="btm"><button class="btm-delete" type="button">Delete</button></a>
+                                <button class="btm-delete" type="button" onclick="on('<%= item.id %>', '<%= item.name %>')">Delete</button>
                             </div>
                         </td>
                     </tr>
@@ -172,7 +172,7 @@
         </div>
     </div>
 
-    <!-- <div class="notif" id="notif">
+    <div class="notif" id="notif">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -185,8 +185,12 @@
                 <div class="modal-footer">
                     <button type="button" class="off-click" onclick="off()">No</button>
                     <a id="nextdelete" class="nextdel" href="#">Yes</a>
-                </div> -->
-
+                </div>
+     
+            </div>
+        </div>
+    </div>
+  </div>
 </body>
 
 
